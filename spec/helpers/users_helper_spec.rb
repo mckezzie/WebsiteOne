@@ -27,6 +27,20 @@ describe UsersHelper do
       expect(result).to eq "Test User"
     end
   end
+
+  describe '#user_time_zone' do
+    it 'should return nil with invalid latitude and longitude' do
+      user = mock_model(User, first_name: 'john', last_name: 'doe', latitude: nil, longitude: nil )
+      result = helper.user_time_zone(user)
+      expect(result).to eq nil
+    end
+
+    it 'should return active support time zone' do
+      user = mock_model(User, first_name: 'john', last_name: 'doe', latitude: 37.793688, longitude: -122.3958692 )
+      result = helper.user_time_zone(user)
+      expect(result).to eq 'Pacific Time (US & Canada)'
+    end
+  end
 end
 
 describe 'Youtube helpers' do
