@@ -16,13 +16,9 @@ module EventHelper
     puts event
     time = nested_hash_value(event, :time)
     
-    if event.has_key?(:time_zone)
-      time_zone = event[:time_zone]
-    end
-
+    time_zone = event[:time_zone] if event.has_key?(:time_zone)
+      
     return nil if time.nil?
-
-    puts time_zone
 
     if !time_zone.nil?
       time.in_time_zone(time_zone).strftime("%F at %I:%M%p") 
