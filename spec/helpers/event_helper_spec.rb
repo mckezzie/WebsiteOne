@@ -21,4 +21,22 @@ describe EventHelper do
     result = helper.current_occurrence_time(nested_value)
     expect(result).to match '2014-03-09 at 11:00PM'
   end
+
+  it 'converts event time to time zone' do
+    ocurrence = Time.utc(2014,"mar",9,23,0,0)
+    time = IceCube::Occurrence.new(ocurrence)
+    event = mock_model(Event, name: 'DailyScrum', category: 'Scrum')
+    nested_value = {:event => event, :time => time, :time_zone => 'Pacific Time (US & Canada)'}
+    result = helper.current_occurence_time(nested_value)
+    expect(result).to match '2014-03-09 at 04:00PM'
+  end
+
+  it 'does not convert event time with no time zone specification' do
+    ocurrence = Time.utc(2014,"mar",9,23,0,0)
+    time = IceCube::Occurrence.new(ocurrence)
+    event = mock_model(Event, name: 'DailyScrum', category: 'Scrum')
+    nested_value = {:event => event, :time => time, :time_zone => nil}
+    result = helper.current_occurrence_time(nested_value)
+    expect(result).to match '2014-03-09 at 11:00PM'
+  end
 end
