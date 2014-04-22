@@ -20,11 +20,13 @@ module UsersHelper
     Timezone::Configure.begin do |c| 
       c.username = 'suparoboto' 
     end
+    
     begin
       timezone = Timezone::Zone.new :latlon => [user.latitude, user.longitude]
       timezone.active_support_time_zone
-    rescue
+    rescue => e
       nil
+      raise unless e.message.include?("No zone was found.")
     end
   end
 
