@@ -16,6 +16,17 @@ module UsersHelper
     end
   end
 
+  def user_time_zone user
+    Timezone::Configure.begin do |c| 
+      c.username = 'suparoboto' 
+    end
+    begin
+      timezone = Timezone::Zone.new :latlon => [user.latitude, user.longitude]
+      timezone.active_support_time_zone
+    rescue
+      nil
+    end
+  end
 
   def link_to_youtube_button(origin_url)
     link_to raw('<i class="fa fa-youtube"></i> Sync with YouTube'),

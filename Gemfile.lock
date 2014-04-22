@@ -314,6 +314,7 @@ GEM
     thread_safe (0.3.1)
       atomic (>= 1.1.7, < 2)
     tilt (1.4.1)
+    timezone (0.3.2)
     tins (1.0.1)
     treetop (1.4.15)
       polyglot
@@ -407,6 +408,7 @@ DEPENDENCIES
   sprockets-image_compressor
   squeel
   therubyracer
+  timezone
   turbolinks
   uglifier
   unicorn

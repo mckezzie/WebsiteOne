@@ -31,12 +31,20 @@ describe UsersHelper do
   describe '#user_time_zone' do
     it 'should return nil with invalid latitude and longitude' do
       user = mock_model(User, first_name: 'john', last_name: 'doe', latitude: nil, longitude: nil )
+      stub_request(:get, "http://api.geonames.org/timezoneJSON?lat=&lng=&username=suparoboto").
+         with(:headers => {'Accept'=>'*/*', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'User-Agent'=>'Ruby'}).
+         to_return(:status => 200, :body => '{"status":{"message":"missing parameter ","value":12}}', :headers => {})
+
       result = helper.user_time_zone(user)
       expect(result).to eq nil
     end
 
     it 'should return active support time zone' do
       user = mock_model(User, first_name: 'john', last_name: 'doe', latitude: 37.793688, longitude: -122.3958692 )
+      stub_request(:get, "http://api.geonames.org/timezoneJSON?lat=37.793688&lng=-122.3958692&username=suparoboto").
+         with(:headers => {'Accept'=>'*/*', 'Accept-Encoding'=>'gzip;q=1.0,deflate;q=0.6,identity;q=0.3', 'User-Agent'=>'Ruby'}).
+         to_return(:status => 200, :body => '{"time":"2014-04-22 01:18","countryName":"United States","sunset":"2014-04-22 19:51","rawOffset":-8,"dstOffset":-7,"countryCode":"US","gmtOffset":-8,"lng":-122.3958692,"sunrise":"2014-04-22 06:25","timezoneId":"America/Los_Angeles","lat":37.793688}', :headers => {})
+
       result = helper.user_time_zone(user)
       expect(result).to eq 'Pacific Time (US & Canada)'
     end
